@@ -1,19 +1,24 @@
-import 'package:dairy/data/local/prefs/app_preference_helper.dart';
-import 'package:dairy/data/local/prefs/preferences_helper_impl.dart';
-import 'package:dairy/data/remote/api_base_helper.dart';
-
-import 'package:dairy/data/remote/converter/json_converter.dart';
-import 'package:dairy/data/remote/interceptor/network_interceptor.dart';
+import 'package:flutter_template/data/item_repository.dart';
+import 'package:flutter_template/data/local/prefs/app_preference_helper.dart';
+import 'package:flutter_template/data/local/prefs/preferences_helper_impl.dart';
+import 'package:flutter_template/data/remote/api_base_helper.dart';
+import 'package:flutter_template/data/repo/item_repository_impl.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter_template/data/local/db/database_helper.dart';
+import 'package:flutter_template/data/local/db/database_helper_impl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 GetIt locator = GetIt.instance;
 
 enum Flavor { PROD, DEBUG, MOCK }
 
-const _prodBaseUrl = 'http://api.themoviedb.org/3/movie/';
+const _prodBaseUrl = 'INSERT PROD BASE URL HERE';
 
-const _debugBaseUrl = 'http://api.themoviedb.org/3/movie/';
+const _debugBaseUrl = 'INSERT DEBUG BASE URL HERE';
+
+const String _databaseName = 'Main.db';
+
+const int _databaseVersion = 1;
 
 class AppInjector {
   Flavor _flavor;
@@ -30,9 +35,6 @@ class AppInjector {
   }
 
   Future<void> _initRepos() async {
-    // DataBaseHelperAbstract
-//    locator.registerSingleton<DatabaseHelperAbstract>(DatabaseHelper());
-
     // SharedPreferences
     final sharedPreferences = await SharedPreferences.getInstance();
     locator.registerLazySingleton<AppPreferencesHelper>(
@@ -40,21 +42,32 @@ class AppInjector {
               pref: sharedPreferences,
             ));
 
+    // DataBaseHelper
+    locator.registerSingleton<DatabaseHelper>(
+      DatabaseHelperImpl(
+        databaseName: _databaseName,
+        databaseVersion: _databaseVersion,
+      )..init(),
+    );
+
     // ApiBaseHelper
     locator.registerLazySingleton<ApiBaseHelper>(() {
       switch (_flavor) {
         case Flavor.PROD:
-          return ProdApiNetwork(
-            baseUrl: _prodBaseUrl,
-            converter: JsonConverter(),
-            interceptors: [NetworkInterceptor(prefHelper: locator())],
-          );
+          return ProdApiNetwork(baseUrl: _prodBaseUrl);
         case Flavor.DEBUG:
-          return DebugApiNetwork(_debugBaseUrl, JsonConverter());
+          return DebugApiNetwork(baseUrl: _debugBaseUrl);
         case Flavor.MOCK:
         default:
           return MockApiNetwork();
       }
     });
+
+    // ItemRepository
+    locator.registerLazySingleton<ItemRepository>(
+      () => ItemRepositoryImpl(
+        helper: locator(),
+      ),
+    );
   }
 }

@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 /// https://marketplace.visualstudio.com/items?itemName=esskar.vscode-flutter-i18n-json
 
 class Locales {
-  static const Locale english = Locale('en', 'US');
-  static const Locale hindi = Locale('hi', 'IN');
+  Locales._();
+
+  static const Locale ENGLISH = Locale('en', 'US');
+  static const Locale HINDI = Locale('hi', 'IN');
 }

@@ -6,7 +6,6 @@ import 'package:meta/meta.dart';
 class PreferencesHelperImpl implements AppPreferencesHelper {
   final SharedPreferences pref;
 
-  static const String _PREF_USER_DATA = 'PREF_USER_DATA';
   static const _PREF_USER_LOGGED_IN = 'PREF_USER_LOGGED_IN';
   static const _PREF_USER_TOKEN = 'PREF_USER_TOKEN';
 

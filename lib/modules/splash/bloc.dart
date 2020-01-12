@@ -1,4 +1,4 @@
-import 'package:dairy/modules/base/bloc_base.dart';
+import 'package:flutter_template/modules/base/bloc_base.dart';
 import 'package:rxdart/rxdart.dart';
 
 class Bloc extends BaseBloc {

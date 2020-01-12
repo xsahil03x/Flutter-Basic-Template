@@ -1,11 +1,11 @@
-import 'package:dairy/di/injector.dart';
-import 'package:dairy/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'config/theme.dart';
 import 'config/locale.dart';
+import 'config/theme/theme.dart';
+import 'di/injector.dart';
 import 'generated/i18n.dart';
+import 'routes/app_routes.dart';
 
 class MyApp extends StatefulWidget {
   final Flavor _flavor;
@@ -47,7 +47,7 @@ class _MyAppState extends State<MyApp> {
       onGenerateRoute: AppRoutes.generateRoute,
       supportedLocales: i18n.supportedLocales,
       localeResolutionCallback: i18n.resolution(
-        fallback: Locales.english,
+        fallback: Locales.ENGLISH,
       ),
     );
   }
