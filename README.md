@@ -1,6 +1,6 @@
-# dairy
+# Flutter Template
 
-A new Flutter project.
+A new Flutter project template.
 
 ## Getting Started
 
